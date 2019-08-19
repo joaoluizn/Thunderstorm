@@ -27,6 +27,7 @@ import android.view.View;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -39,15 +40,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        handleFloatingButton();
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }else{
-            Log.e("MainActivity", "Map fragment didn't load properly");
-        }
+        View mainView = findViewById(R.id.mainView);
+        handleConnection(mainView);
+        handleFloatingButton();
+        initMap();
     }
 
     @Override
@@ -130,5 +127,37 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Snackbar.make(view, message,Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .show();
+    }
+
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        return false;
+    }
+
+    private void handleConnection(View view){
+        if (!isOnline()){
+            String snackString = String.format(Locale.ENGLISH,
+                    "Phone is not connected, please check connection.");
+            createDefaultSnackbar(view, snackString);
+        }
+
+    }
+
+    private void initMap(){
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }else{
+            Log.e("MainActivity", "Map fragment didn't load properly");
+        }
     }
 }
