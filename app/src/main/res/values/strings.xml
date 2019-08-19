@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">WhatIsTheWeather</string>
-    <string name="title_activity_main">Thunderstorm Map</string>
+    <string name="app_name">Thunderstorm</string>
+    <string name="near_places_activity_name">Search Result</string>
+
+    <string name="open_weather_icon_url">http://openweathermap.org/img/wn/%s@2x.png</string>
+    <string name="open_weather_api_url">http://api.openweathermap.org/data/2.5/find?lat=%f&amp;lon=%f&amp;cnt=15&amp;units=metric&amp;APPID=%s</string>
 </resources>

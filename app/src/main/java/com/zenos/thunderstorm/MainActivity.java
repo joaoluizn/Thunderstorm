@@ -1,11 +1,13 @@
 package com.zenos.thunderstorm;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,6 +24,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
+
+import org.json.JSONObject;
 
 import java.util.Locale;
 
@@ -93,20 +97,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         * - cnt: Number max of returned cities (The returned quantity could be less than this.
         * */
         String openWeatherUrl = String.format(Locale.ENGLISH,
-                "http://api.openweathermap.org/data/2.5/find?lat=%f&lon=%f&cnt=15&APPID=%s",
+                getResources().getString(R.string.open_weather_api_url),
                 coordinate.latitude, coordinate.longitude,
                 getResources().getString(R.string.open_weather_key));
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, openWeatherUrl,
-                new Response.Listener<String>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, openWeatherUrl, null, new Response.Listener<JSONObject>() {
+
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
 //                      #TODO: temporary SnackBar -> this will be and intent to cities list activity
-                        createDefaultSnackbar(view, response);
-                        Log.d("MainActivity", response);
+                        Intent intent = new Intent(MainActivity.this, NearPlacesActivity.class);
+                        intent.putExtra("json", response.toString());
+                        startActivity(intent);
+
+                        Log.d("MainActivity", response.toString());
                     }
-                },
-                new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
+
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         createDefaultSnackbar(view,
@@ -115,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
 
-        queue.add(stringRequest);
+        queue.add(jsonObjectRequest);
     }
 
     private void createDefaultSnackbar(View view, String message){
