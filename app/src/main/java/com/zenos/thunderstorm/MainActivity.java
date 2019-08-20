@@ -8,7 +8,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,7 +19,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
@@ -38,11 +36,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         View mainView = findViewById(R.id.mainView);
-        handleConnection(mainView);
+        checkConnectivity(mainView);
         handleFloatingButton();
         initMap();
     }
@@ -114,9 +110,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        createDefaultSnackbar(view,
-                                "No places where found. Pick a new position.");
-                        Log.d("MainActivity", "Error on request");
+                        if(checkConnectivity(view)){
+                            createDefaultSnackbar(view,
+                                    "No places found. Pick a new position.");
+                            Log.d("MainActivity", "Error on request" + error.getMessage());
+                        }
                     }
                 });
 
@@ -142,13 +140,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return false;
     }
 
-    private void handleConnection(View view){
+    private boolean checkConnectivity(View view){
         if (!isOnline()){
             String snackString = String.format(Locale.ENGLISH,
                     "Phone is not connected, please check connection.");
             createDefaultSnackbar(view, snackString);
+            return false;
         }
-
+        return true;
     }
 
     private void initMap(){

@@ -46,7 +46,7 @@ public class NearPlacesActivity extends AppCompatActivity {
 
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
                     this,
-                    android.R.layout.simple_list_item_1,
+                    R.layout.list_item,
                     placesNames);
 
             placesListView.setAdapter(arrayAdapter);

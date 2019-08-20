@@ -12,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class CityWeatherActivity extends AppCompatActivity {
 
@@ -30,13 +31,18 @@ public class CityWeatherActivity extends AppCompatActivity {
         ImageView weatherIcon = findViewById(R.id.weatherIcon);
 
         city.setText(intent.getStringExtra("name"));
-        minTemp.setText(intent.getStringExtra("minTemp") + "ºC");
-        maxTemp.setText(intent.getStringExtra("maxTemp") + "ºC");
-        humidity.setText(intent.getStringExtra("humidity") + "%");
-        windSpeed.setText(intent.getStringExtra("windSpeed") + " m/s");
-        ArrayList<HashMap<String, String>> weatherDescriptions = (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("weatherDescription");
+        minTemp.setText(String.format("%sºC", intent.getStringExtra("minTemp")));
+        maxTemp.setText(String.format("%sºC", intent.getStringExtra("maxTemp")));
+        humidity.setText(String.format("%s%%", intent.getStringExtra("humidity")));
+        windSpeed.setText(String.format("%s m/s", intent.getStringExtra("windSpeed")));
+        ArrayList<HashMap<String, String>> weatherDescriptions =
+                (ArrayList<HashMap<String, String>>) intent.getSerializableExtra("weatherDescription");
 
-        weather.setText(weatherDescriptions.get(0).get("type"));
+        String description = Objects.requireNonNull(weatherDescriptions).get(0).get("type");
+        String capitalized = Objects.requireNonNull(description).substring(0, 1).toUpperCase() +
+                description.substring(1);
+
+        weather.setText(capitalized);
         Picasso.get().load(weatherDescriptions.get(0).get("iconUrl")).into(weatherIcon);
     }
 }
