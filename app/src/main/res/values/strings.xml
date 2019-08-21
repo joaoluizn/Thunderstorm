@@ -7,10 +7,11 @@
     <string name="open_weather_icon_url">http://openweathermap.org/img/wn/%s@2x.png</string>
     <string name="open_weather_api_url">http://api.openweathermap.org/data/2.5/find?lat=%f&amp;lon=%f&amp;cnt=15&amp;units=metric&amp;APPID=%s</string>
 
+
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+
     <string name="city_name_textview">City</string>
     <string name="min_temp_textview">Min Temperature</string>
     <string name="max_temp_textview">Max Temperature</string>
-
-    Max Temp.
 
 </resources>

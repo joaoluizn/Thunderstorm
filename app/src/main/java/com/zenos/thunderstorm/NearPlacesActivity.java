@@ -30,6 +30,9 @@ import static com.zenos.thunderstorm.utils.WeatherJsonUtils.getWeatherDescriptio
 
 public class NearPlacesActivity extends AppCompatActivity {
 
+    private static final String TAG = "NearPlacesActivity";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,12 +94,12 @@ public class NearPlacesActivity extends AppCompatActivity {
                 ArrayList<HashMap<String, String>> weatherDescription = getWeatherDescription(
                         placesList, position, getResources());
 
-                Log.d("NearPlacesActivity", "Name: " + name);
-                Log.d("NearPlacesActivity", "MinTemp:" + minTemp);
-                Log.d("NearPlacesActivity", "MaxTemp:" + maxTemp);
-                Log.d("NearPlacesActivity", "Humidity:" + humidity);
-                Log.d("NearPlacesActivity", "WindSpeed:" + windSpeed);
-                Log.d("NearPlacesActivity", "WDescription:" + weatherDescription.toString());
+                Log.d(TAG, "Name: " + name);
+                Log.d(TAG, "MinTemp:" + minTemp);
+                Log.d(TAG, "MaxTemp:" + maxTemp);
+                Log.d(TAG, "Humidity:" + humidity);
+                Log.d(TAG, "WindSpeed:" + windSpeed);
+                Log.d(TAG, "WDescription:" + weatherDescription.toString());
 
                 intent.putExtra("name", name);
                 intent.putExtra("minTemp", minTemp);

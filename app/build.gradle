@@ -22,6 +22,10 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    // Firebase
+    implementation 'com.google.firebase:firebase-messaging:19.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+
     // Inloco SDK
     implementation 'com.inlocomedia.android:android-sdk-engagement:4.5.3'
     implementation 'com.inlocomedia.android:android-sdk-location:4.5.3'
@@ -42,3 +46,5 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +14,8 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class CityWeatherActivity extends AppCompatActivity {
+
+    private static final String TAG = "CityWeatherActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

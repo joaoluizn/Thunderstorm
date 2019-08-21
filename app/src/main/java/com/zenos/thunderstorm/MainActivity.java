@@ -1,5 +1,6 @@
 package com.zenos.thunderstorm;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -18,6 +19,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import com.zenos.thunderstorm.utils.Connectivity;
+import com.zenos.thunderstorm.utils.Inloco;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
@@ -25,22 +29,39 @@ import android.view.View;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private LatLng currLocation;
+    private final static String[] REQUIRED_PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION };
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Inloco.initInlocoSDK(MainActivity.this,
+                getResources().getString(R.string.inloco_sdk_key), true);
+        Inloco.initInlocoRequestPermission(MainActivity.this);
+
         View mainView = findViewById(R.id.mainView);
         checkConnectivity(mainView);
         handleFloatingButton();
         initMap();
+    }
+
+    private void initMap(){
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }else{
+            Log.e(TAG, "Map fragment didn't load properly");
+        }
     }
 
     @Override
@@ -104,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         intent.putExtra("json", response.toString());
                         startActivity(intent);
 
-                        Log.d("MainActivity", response.toString());
+                        Log.d(TAG, response.toString());
                     }
                 }, new Response.ErrorListener() {
 
@@ -113,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         if(checkConnectivity(view)){
                             createDefaultSnackbar(view,
                                     "No places found. Pick a new position.");
-                            Log.d("MainActivity", "Error on request" + error.getMessage());
+                            Log.d(TAG, "Error on request" + error.getMessage());
                         }
                     }
                 });
@@ -127,21 +148,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .show();
     }
 
-    public boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        }
-        catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
-
-        return false;
-    }
-
     private boolean checkConnectivity(View view){
-        if (!isOnline()){
+        if (!Connectivity.isOnline()){
             String snackString = String.format(Locale.ENGLISH,
                     "Phone is not connected, please check connection.");
             createDefaultSnackbar(view, snackString);
@@ -150,13 +158,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
-    private void initMap(){
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }else{
-            Log.e("MainActivity", "Map fragment didn't load properly");
-        }
-    }
+    //
+
+
 }
