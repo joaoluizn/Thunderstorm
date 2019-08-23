@@ -1,6 +1,5 @@
 package com.zenos.thunderstorm;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -35,7 +34,6 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private LatLng currLocation;
-    private final static String[] REQUIRED_PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION };
 
     private static final String TAG = "MainActivity";
 
@@ -43,23 +41,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Inloco.initInlocoSDK(MainActivity.this,
                 getResources().getString(R.string.inloco_sdk_key), true);
         Inloco.initInlocoRequestPermission(MainActivity.this);
-
         View mainView = findViewById(R.id.mainView);
         checkConnectivity(mainView);
         handleFloatingButton();
         initMap();
     }
 
-    private void initMap(){
+    private void initMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
-        }else{
+        } else {
             Log.e(TAG, "Map fragment didn't load properly");
         }
     }
@@ -88,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    private void handleFloatingButton(){
+    private void handleFloatingButton() {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,14 +98,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    public void requestNearLocations(final View view, LatLng coordinate){
+    public void requestNearLocations(final View view, LatLng coordinate) {
         final RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
 
         /*
-        * NOTE: API params used:
-        * - lat, lon: latitude and longitude from desired point
-        * - cnt: Number max of returned cities (The returned quantity could be less than this.
-        * */
+         * NOTE: API params used:
+         * - lat, lon: latitude and longitude from desired point
+         * - cnt: Number max of returned cities (The returned quantity could be less than this.
+         * */
         String openWeatherUrl = String.format(Locale.ENGLISH,
                 getResources().getString(R.string.open_weather_api_url),
                 coordinate.latitude, coordinate.longitude,
@@ -131,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if(checkConnectivity(view)){
+                        if (checkConnectivity(view)) {
                             createDefaultSnackbar(view,
                                     "No places found. Pick a new position.");
                             Log.d(TAG, "Error on request" + error.getMessage());
@@ -142,14 +138,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         queue.add(jsonObjectRequest);
     }
 
-    private void createDefaultSnackbar(View view, String message){
-        Snackbar.make(view, message,Snackbar.LENGTH_LONG)
+    private void createDefaultSnackbar(View view, String message) {
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .show();
     }
 
-    private boolean checkConnectivity(View view){
-        if (!Connectivity.isOnline()){
+    private boolean checkConnectivity(View view) {
+        if (!Connectivity.isOnline()) {
             String snackString = String.format(Locale.ENGLISH,
                     "Phone is not connected, please check connection.");
             createDefaultSnackbar(view, snackString);

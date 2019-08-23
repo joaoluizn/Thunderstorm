@@ -40,7 +40,7 @@ public class NearPlacesActivity extends AppCompatActivity {
         buildListView();
     }
 
-    private void buildListView(){
+    private void buildListView() {
         ListView placesListView = findViewById(R.id.places_list);
 
         if (getIntent().hasExtra("json")) {
@@ -79,7 +79,7 @@ public class NearPlacesActivity extends AppCompatActivity {
         return placesNames;
     }
 
-    private void createListViewListener(ListView lv, final JSONArray placesList){
+    private void createListViewListener(ListView lv, final JSONArray placesList) {
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

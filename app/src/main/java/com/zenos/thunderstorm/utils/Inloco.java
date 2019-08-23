@@ -15,11 +15,11 @@ import java.util.HashMap;
 public class Inloco {
 
 
-    private final static String[] REQUIRED_PERMISSIONS = { Manifest.permission.ACCESS_FINE_LOCATION };
+    private final static String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION};
     private static final String TAG = "Inloco";
 
 
-    public static void initInlocoSDK(Context context, String appID, Boolean logFlag){
+    public static void initInlocoSDK(Context context, String appID, Boolean logFlag) {
         InLocoEngagementOptions options = InLocoEngagementOptions.getInstance(context);
 
         // The App ID you obtained in the dashboard
@@ -34,7 +34,7 @@ public class Inloco {
     }
 
 
-    public static void initInlocoRequestPermission(final Activity activity){
+    public static void initInlocoRequestPermission(final Activity activity) {
         final boolean askIfDenied = true; // Will prompt the user if he has previously denied the permission
 
         InLocoEngagement.requestPermissions(activity, REQUIRED_PERMISSIONS, askIfDenied, new PermissionsListener() {
@@ -48,5 +48,4 @@ public class Inloco {
             }
         });
     }
-
 }
