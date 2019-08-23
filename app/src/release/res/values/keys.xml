@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="open_weather_key">YOUR_OPEN_WEATHER_KEY</string>
+    <string name="inloco_sdk_key">YOUR_INLOCO_SDK_KEY</string>
 </resources>
